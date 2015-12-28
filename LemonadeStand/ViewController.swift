@@ -14,14 +14,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblInventoryCash: UILabel!
     @IBOutlet weak var lblInventoryIceCubes: UILabel!
     @IBOutlet weak var lblnventoryLemons: UILabel!
-    
     @IBOutlet weak var lblPurchaseInventoryTotalLemons: UILabel!
     @IBOutlet weak var lblPurchaseInventoryTotalIceCubes: UILabel!
-    
     @IBOutlet weak var lblCreateNumberIceCubes: UILabel!
     @IBOutlet weak var lblCreateNumberLemons: UILabel!
-    
     @IBOutlet weak var lblCreateRatio: UILabel!
+    @IBOutlet weak var uivWeatherToday: UIImageView!
+    @IBOutlet weak var lblWeatherEffect: UILabel!
+    
     
     // Declare constats for prices
     let kLemonPrice:Int  = 2
@@ -32,16 +32,19 @@ class ViewController: UIViewController {
     var numIceCubes:Int = 0
     
     // Declare how much cash to start with
-    var cash:Int = 50
+    var cash:Int = 10
+    
+    // Variable to determine how the weather is going to effect things
+    // if cold -3 people
+    // if mild do nothing
+    // if hot + 5 people 
+    var weatherEffect:Int = 0;
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.lblInventoryCash.text = "\(cash)"
-        self.lblnventoryLemons.text = "\(0)"
-        self.lblInventoryIceCubes.text = "\(0)"
-        
+        reset()
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +52,20 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    func reset(){
+        self.lblInventoryCash.text = "\(cash)"
+        self.lblnventoryLemons.text = "\(0)"
+        self.lblInventoryIceCubes.text = "\(0)"
+        self.lblPurchaseInventoryTotalLemons.text = "\(0)"
+        self.lblPurchaseInventoryTotalIceCubes.text = "\(0)"
+        self.lblCreateNumberLemons.text = "\(0)"
+        self.lblCreateNumberIceCubes.text = "\(0)"
+        self.lblCreateRatio.text = ""
+        self.lblWeatherEffect.text = ""
+        determineWeatherForecast()
+    }
+    
+    
     @IBAction func btnPurchaseInventoryMoreLemons(sender: UIButton) {
         if (self.lblInventoryCash.text?.toInt()) < 2 {
            showAlertWithText(header: "Lemons", message: "Not enough cash for more lemons")
@@ -121,7 +137,6 @@ class ViewController: UIViewController {
         else{
             self.lblCreateNumberLemons.text = "\((self.lblCreateNumberLemons.text?.toInt())! + 1)"
             self.lblPurchaseInventoryTotalLemons.text = "\((self.lblPurchaseInventoryTotalLemons.text?.toInt())! - 1)"
-            calculateRatio()
         }
     }
     
@@ -134,7 +149,6 @@ class ViewController: UIViewController {
         else{
             self.lblCreateNumberLemons.text = "\((self.lblCreateNumberLemons.text?.toInt())! - 1)"
             self.lblPurchaseInventoryTotalLemons.text = "\((self.lblPurchaseInventoryTotalLemons.text?.toInt())! + 1)"
-            calculateRatio()
         }
     }
     
@@ -148,7 +162,6 @@ class ViewController: UIViewController {
         else{
             self.lblCreateNumberIceCubes.text = "\((self.lblCreateNumberIceCubes.text?.toInt())! + 1)"
             self.lblPurchaseInventoryTotalIceCubes.text = "\((self.lblPurchaseInventoryTotalIceCubes.text?.toInt())! - 1)"
-            calculateRatio()
         }
         
     }
@@ -163,49 +176,117 @@ class ViewController: UIViewController {
         else{
             self.lblCreateNumberIceCubes.text = "\((self.lblCreateNumberIceCubes.text?.toInt())! - 1)"
             self.lblPurchaseInventoryTotalIceCubes.text = "\((self.lblPurchaseInventoryTotalIceCubes.text?.toInt())! + 1)"
-            calculateRatio()
         }
     }
     
-    func calculateRatio(){
+    func calculateRatio() -> Double{
         // Ratios 0.0 - 0.4 acidic
         // 0.41 - 0.60 neutral
         // 0.61 - 1.00 diluted
         lblCreateRatio.text = ""
+        var ratio:Double = 0.0
         
         if lblCreateNumberLemons.text?.toInt() == 0 && lblCreateNumberIceCubes.text?.toInt() == 0 {
             self.lblCreateRatio.text = "Nothing here yet"
+            ratio = 0.0
         }
         else if lblCreateNumberLemons.text?.toInt() > 0 && lblCreateNumberIceCubes.text?.toInt() == 0 {
             self.lblCreateRatio.text = "Pure lemon juice"
+            ratio = 1.0
         }
         else if lblCreateNumberLemons.text?.toInt() == 0 && lblCreateNumberIceCubes.text?.toInt() > 0 {
             self.lblCreateRatio.text = "Cold water"
+            ratio = 0.0
         }
         else{
             var numLemons:Double = Double( (lblCreateNumberLemons.text?.toInt())! )
-            var total:Double = ( Double((lblCreateNumberLemons.text?.toInt())!) + Double((lblCreateNumberIceCubes.text?.toInt())!) )
-            var ratio:Double = numLemons / total
+            var iceCubes:Double = Double((lblCreateNumberIceCubes.text?.toInt())!)
+            var ratio:Double = numLemons / iceCubes
             var x:String = NSString(format: "%.2f", ratio)
             println(x)
             
-            if ratio <= 0.4 {
-                lblCreateRatio.text = "Acidic: \(x)"
-            }
-            else if ratio > 0.4 && ratio <= 0.6 {
-                lblCreateRatio.text = "Neutral: \(x)"
-            }
-            else if ratio > 0.6 && ratio <= 1.0{
+            if ratio < 1.0 {
                 lblCreateRatio.text = "Diluted: \(x)"
             }
+            else if ratio == 1.0 {
+                lblCreateRatio.text = "Neutral: \(x)"
+            }
+            else if ratio > 1.0 {
+                lblCreateRatio.text = "Acidic: \(x)"
+            }
             else{
-                // Something ain't right
+                println("ERROR: Something is rotten in the state of wormulon")
             }
         }
+        return ratio
     }
     
     @IBAction func btnStart(sender: UIButton) {
-        println("btnStart")
+        if (lblCreateNumberLemons.text?.toInt())! == 0 {
+            showAlertWithText(header: "No Lemons", message: "Create Lemonade: Need at least one lemon")
+            return
+        }
+        
+        var customers:[CGFloat]
+        var ratio:Double = calculateRatio()
+        customers = createCustomers()
+        var cash:Int = calculateStacksOfCash(customers, ratio: ratio)
+        inBusinessOrNot(cash)
+    }
+    
+    
+    func calculateStacksOfCash(customers:[CGFloat], ratio:Double) -> Int{
+        var result:Character = "l" // Initialize to l, loose cash
+        var runningCashCount: Int = 0
+        for cust in customers {
+            if cust <= 0.4 {
+                // Acidic
+                result = "a"
+            }
+            else if cust > 0.40 && cust <= 0.60 {
+                // Neutral
+                result = "n"
+            }
+            else if cust > 0.61 && cust <= 1.0{
+                // Diluted
+                result = "d"
+            }
+        
+            if (ratio > 1.0 && result == "a" ) || (ratio == 1.0 && result == "n") || (ratio < 1.0 && result == "d") {
+                runningCashCount++
+            }
+            else{
+                runningCashCount--
+            }
+        }// End for cust
+        
+        return runningCashCount
+    }
+    
+    func inBusinessOrNot(cash:Int){
+        var profitOrLoss:Int = (lblInventoryCash.text?.toInt())! + cash
+        
+        lblInventoryCash.text = String(profitOrLoss)
+        if profitOrLoss <= 0 {
+            println("outta business")
+            reset()
+        }
+        else {
+            println("in business")
+        }
+        
+
+    }
+    
+    func createCustomers() -> [CGFloat]{
+        let count:Int = Int(arc4random_uniform(UInt32(10 + self.weatherEffect)))
+        var customers:[CGFloat] = []
+        var tastePreference:CGFloat = 0.0
+        for var x = 0; x < count; x++ {
+            customers.append(CGFloat(Float(arc4random()) / Float(UINT32_MAX)))
+           
+        }
+        return customers;
     }
     
     func showAlertWithText(header: String = "Error or some kind", message: String ){
@@ -213,6 +294,30 @@ class ViewController: UIViewController {
          alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
         
+    }
+    
+    func determineWeatherForecast(){
+        
+       
+        var forecast:Int = Int(arc4random_uniform(UInt32(3)))
+        print(forecast)
+        switch (forecast){
+            case 0:
+                uivWeatherToday.image = UIImage(named: "Cold")
+                self.weatherEffect = -3
+                
+            case 1:
+                uivWeatherToday.image = UIImage(named: "Mild")
+                self.weatherEffect = 0
+                
+            case 2:
+                uivWeatherToday.image = UIImage(named: "Warm")
+                self.weatherEffect =  5
+            default:
+                uivWeatherToday.image = UIImage(named: "Mild")
+                self.weatherEffect = 0
+        }
+        self.lblWeatherEffect.text = String(self.weatherEffect)
     }
     
 }

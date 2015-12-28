@@ -289,19 +289,52 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="152" y="424" width="46" height="30"/>
+                                    <rect key="frame" x="152" y="440" width="46" height="30"/>
                                 </variation>
                                 <connections>
                                     <action selector="btnStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="J0r-QM-B4n"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-TZ-HOi">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hb6-TZ-HOi">
                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="102" y="80" width="57" height="21"/>
+                                </variation>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fi2-bd-gg7">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="227" y="20" width="88" height="66"/>
+                                </variation>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weather Effect:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aZo-Y5-yCL">
+                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="24" y="406" width="103" height="21"/>
+                                </variation>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="people" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iQ-fY-vto">
+                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="178" y="406" width="52" height="21"/>
+                                </variation>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F7s-oC-2wy">
+                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="135" y="406" width="42" height="21"/>
                                 </variation>
                             </label>
                         </subviews>
@@ -337,6 +370,10 @@
                                 <exclude reference="ZE1-F1-5e4"/>
                                 <exclude reference="3JF-lm-O5h"/>
                                 <exclude reference="Hb6-TZ-HOi"/>
+                                <exclude reference="fi2-bd-gg7"/>
+                                <exclude reference="aZo-Y5-yCL"/>
+                                <exclude reference="7iQ-fY-vto"/>
+                                <exclude reference="F7s-oC-2wy"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -370,6 +407,10 @@
                                 <include reference="ZE1-F1-5e4"/>
                                 <include reference="3JF-lm-O5h"/>
                                 <include reference="Hb6-TZ-HOi"/>
+                                <include reference="fi2-bd-gg7"/>
+                                <include reference="aZo-Y5-yCL"/>
+                                <include reference="7iQ-fY-vto"/>
+                                <include reference="F7s-oC-2wy"/>
                             </mask>
                         </variation>
                     </view>
@@ -381,7 +422,9 @@
                         <outlet property="lblInventoryIceCubes" destination="ORQ-f1-bEE" id="l2p-0i-CkL"/>
                         <outlet property="lblPurchaseInventoryTotalIceCubes" destination="QGa-kF-Kib" id="FuD-9j-6Pe"/>
                         <outlet property="lblPurchaseInventoryTotalLemons" destination="Wv6-Df-mBc" id="rdX-tN-zRD"/>
+                        <outlet property="lblWeatherEffect" destination="F7s-oC-2wy" id="wi1-dx-TXb"/>
                         <outlet property="lblnventoryLemons" destination="4b9-C4-bpP" id="4Ng-Qx-UFN"/>
+                        <outlet property="uivWeatherToday" destination="fi2-bd-gg7" id="Rg8-71-3Ko"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
