@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var uivWeatherToday: UIImageView!
     @IBOutlet weak var lblWeatherEffect: UILabel!
     
+    @IBOutlet weak var lblDaysOpenCounter: UILabel!
     
     // Declare constats for prices
     let kLemonPrice:Int  = 2
@@ -38,7 +39,11 @@ class ViewController: UIViewController {
     // if cold -3 people
     // if mild do nothing
     // if hot + 5 people 
+    // Initialize to mild
     var weatherEffect:Int = 0;
+    
+    // Variable to hold how many days we have been in business
+    var daysOpen: Int = 0
     
     
     override func viewDidLoad() {
@@ -53,18 +58,37 @@ class ViewController: UIViewController {
     }
 
     func reset(){
-        self.lblInventoryCash.text = "\(cash)"
-        self.lblnventoryLemons.text = "\(0)"
-        self.lblInventoryIceCubes.text = "\(0)"
-        self.lblPurchaseInventoryTotalLemons.text = "\(0)"
-        self.lblPurchaseInventoryTotalIceCubes.text = "\(0)"
-        self.lblCreateNumberLemons.text = "\(0)"
-        self.lblCreateNumberIceCubes.text = "\(0)"
-        self.lblCreateRatio.text = ""
-        self.lblWeatherEffect.text = ""
+        resetInventoryCash()
+        resetInventory()
+        resetPurchasedInventory()
+        resetCreateLemonade()
+        resetOpenForBusiness()
         determineWeatherForecast()
     }
     
+    func resetInventoryCash(){
+        lblInventoryCash.text = "\(self.cash)"
+    }
+    
+    func resetInventory(){
+        self.lblnventoryLemons.text = "\(0)"
+        self.lblInventoryIceCubes.text = "\(0)"
+    }
+    
+    func resetPurchasedInventory(){
+        lblPurchaseInventoryTotalIceCubes.text = "\(0)"
+        lblPurchaseInventoryTotalLemons.text = "\(0)"
+    }
+    
+    func resetCreateLemonade(){
+        lblCreateNumberIceCubes.text = "\(0)"
+        lblCreateNumberLemons.text = "\(0)"
+        lblCreateRatio.text = "\(0)"
+    }
+    
+    func resetOpenForBusiness(){
+        self.lblWeatherEffect.text = "\(0)"
+    }
     
     @IBAction func btnPurchaseInventoryMoreLemons(sender: UIButton) {
         if (self.lblInventoryCash.text?.toInt()) < 2 {
@@ -232,6 +256,9 @@ class ViewController: UIViewController {
         customers = createCustomers()
         var cash:Int = calculateStacksOfCash(customers, ratio: ratio)
         inBusinessOrNot(cash)
+        self.lblCreateNumberLemons.text = "\(0)"
+        self.lblCreateNumberIceCubes.text = "\(0)"
+        
     }
     
     
@@ -266,16 +293,16 @@ class ViewController: UIViewController {
     func inBusinessOrNot(cash:Int){
         var profitOrLoss:Int = (lblInventoryCash.text?.toInt())! + cash
         
-        lblInventoryCash.text = String(profitOrLoss)
+        lblInventoryCash.text = "\(profitOrLoss)"
         if profitOrLoss <= 0 {
-            println("outta business")
+            self.lblDaysOpenCounter.text = "Opening Day!!!!"
             reset()
         }
         else {
-            println("in business")
+            self.daysOpen++
+            self.lblDaysOpenCounter.text = "Open for \(self.daysOpen) days"
+            
         }
-        
-
     }
     
     func createCustomers() -> [CGFloat]{
@@ -297,19 +324,14 @@ class ViewController: UIViewController {
     }
     
     func determineWeatherForecast(){
-        
-       
         var forecast:Int = Int(arc4random_uniform(UInt32(3)))
-        print(forecast)
         switch (forecast){
             case 0:
                 uivWeatherToday.image = UIImage(named: "Cold")
                 self.weatherEffect = -3
-                
             case 1:
                 uivWeatherToday.image = UIImage(named: "Mild")
                 self.weatherEffect = 0
-                
             case 2:
                 uivWeatherToday.image = UIImage(named: "Warm")
                 self.weatherEffect =  5
@@ -317,7 +339,7 @@ class ViewController: UIViewController {
                 uivWeatherToday.image = UIImage(named: "Mild")
                 self.weatherEffect = 0
         }
-        self.lblWeatherEffect.text = String(self.weatherEffect)
+        self.lblWeatherEffect.text = "Weather caused \(self.weatherEffect) people to change their minds "
     }
     
 }
